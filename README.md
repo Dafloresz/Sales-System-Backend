@@ -12,7 +12,6 @@ Este projeto tem como objetivo demonstrar a construção de uma **API RESTful** 
 - 🌱 **Spring Boot**
 - 🌐 **Spring Web (Spring MVC)** – construção de API REST
 - 🗄 **Spring Data JPA** – persistência de dados
-- 🐘 **PostgreSQL** – banco de dados relacional
 - 🧪 **H2 Database** – banco em memória para testes
 - 📦 **Maven** – gerenciamento de dependências e build
 
@@ -81,6 +80,7 @@ http://localhost:8080
 - Relacionamentos entre entidades
 - Configuração de múltiplos bancos de dados
 - Estruturação de aplicações backend em camadas
+  
 
 📚 Aprendizados
 

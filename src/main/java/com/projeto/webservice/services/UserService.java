@@ -5,7 +5,6 @@ import com.projeto.webservice.repositories.UserRepository;
 import com.projeto.webservice.services.exceptions.DatabaseException;
 import com.projeto.webservice.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,40 +22,40 @@ public class UserService {
     public List<User> findAll() {
         return repository.findAll();
     }
-    
-    public User findByID (Long id){
+
+    public User findByID(Long id) {
         Optional<User> userById = repository.findById(id);
         return userById.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User insert (User user){
+    public User insert(User user) {
         return repository.save(user);
     }
 
     public void delete(Long id) {
-        try{
+        try {
             repository.deleteById(id);
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(id);
 
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
     }
 
 
-    public User update(Long id, User user){
-       try {
-           User entity = repository.getReferenceById(id);
-           updateData(entity, user);
-           return repository.save(entity);
+    public void update(Long id, User data) {
+        try {
+            User entity = repository.getReferenceById(id);
+            updateData(entity, data);
+            repository.save(entity);
 
-       } catch (EntityNotFoundException e){
-           throw new ResourceNotFoundException(id);
-       }
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
-    private void updateData(User entity, User data){
+    private void updateData(User entity, User data) {
         entity.setName(data.getName());
         entity.setEmail(data.getEmail());
         entity.setPhone(data.getPhone());

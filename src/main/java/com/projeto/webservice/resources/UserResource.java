@@ -1,5 +1,6 @@
 package com.projeto.webservice.resources;
 
+import com.projeto.webservice.dto.UserResponseDTO;
 import com.projeto.webservice.entities.User;
 import com.projeto.webservice.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,15 @@ public class UserResource {
     private UserService service;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
-        List<User> listUser = service.findAll();
-        return ResponseEntity.ok().body(listUser);
+    public ResponseEntity<List<UserResponseDTO>> findAll() {
+        List<UserResponseDTO> ListDTOs = service.findAll();
+        return ResponseEntity.ok().body(ListDTOs);
     }
 
     @GetMapping (value = "/{id}")
-    public ResponseEntity<User> findById (@PathVariable Long id) {
-        User userById = service.findByID(id);
-        return ResponseEntity.ok().body(userById);
+    public ResponseEntity<UserResponseDTO> findById (@PathVariable Long id) {
+        UserResponseDTO dto = service.findByID(id);
+        return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping

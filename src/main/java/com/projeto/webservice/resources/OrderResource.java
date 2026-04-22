@@ -1,5 +1,6 @@
 package com.projeto.webservice.resources;
 
+import com.projeto.webservice.dto.OrderStatusDTO;
 import com.projeto.webservice.entities.Order;
 import com.projeto.webservice.entities.User;
 import com.projeto.webservice.services.OrderService;
@@ -41,6 +42,12 @@ public class OrderResource {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody OrderStatusDTO statusDTO){
+        service.update(id, statusDTO);
         return ResponseEntity.noContent().build();
     }
 }

@@ -1,5 +1,6 @@
 package com.projeto.webservice.services;
 
+import com.projeto.webservice.dto.OrderStatusDTO;
 import com.projeto.webservice.entities.Order;
 import com.projeto.webservice.entities.OrderItem;
 import com.projeto.webservice.entities.Product;
@@ -69,5 +70,11 @@ public class OrderService {
         if (!orderRepository.existsById(id)){
             throw new ResourceNotFoundException("Pedido não encontrado!");
         } else orderRepository.deleteById(id);
+    }
+
+    public Order update(Long id, OrderStatusDTO statusDTO){
+        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado!"));
+        order.setOrderStatus(statusDTO.getOrderStatus());
+        return orderRepository.save(order);
     }
 }

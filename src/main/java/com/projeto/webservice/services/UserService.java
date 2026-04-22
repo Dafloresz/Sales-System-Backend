@@ -1,17 +1,16 @@
 package com.projeto.webservice.services;
 
+import com.projeto.webservice.dto.UserResponseDTO;
 import com.projeto.webservice.entities.User;
 import com.projeto.webservice.repositories.UserRepository;
-import com.projeto.webservice.services.exceptions.DatabaseException;
 import com.projeto.webservice.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -19,13 +18,14 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    public List<User> findAll() {
-        return repository.findAll();
+    public List<UserResponseDTO> findAll() {
+       List<User> users = repository.findAll();
+       return listUserToListUserDTO(users);
     }
 
-    public User findByID(Long id) {
-        Optional<User> userById = repository.findById(id);
-        return userById.orElseThrow(() -> new ResourceNotFoundException(id));
+    public UserResponseDTO findByID(Long id) {
+        User userById = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
+        return userToUserDTO(userById);
     }
 
     public User insert(User user) {
@@ -56,4 +56,11 @@ public class UserService {
         entity.setPhone(data.getPhone());
     }
 
+    private UserResponseDTO userToUserDTO(User user){
+        return new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone());
+    }
+
+    private List<UserResponseDTO> listUserToListUserDTO(List<User> usersList) {
+        return usersList.stream().map(this::userToUserDTO).collect(Collectors.toList());
+    }
 }

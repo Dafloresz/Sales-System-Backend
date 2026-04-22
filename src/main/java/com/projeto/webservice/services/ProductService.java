@@ -33,14 +33,10 @@ public class ProductService {
     }
 
     public void delete(Long id) {
-        try {
-            productRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException(id);
+       if (!productRepository.existsById(id)){
+           throw new ResourceNotFoundException("Produto não encontrado!");
 
-        } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException(e.getMessage());
-        }
+       } else productRepository.deleteById(id);
     }
 
     public Product update(Product data, Long id){

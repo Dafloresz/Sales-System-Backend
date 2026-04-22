@@ -1,14 +1,15 @@
 package com.projeto.webservice.resources;
 
 import com.projeto.webservice.entities.Order;
+import com.projeto.webservice.entities.User;
 import com.projeto.webservice.services.OrderService;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -24,10 +25,22 @@ public class OrderResource {
         return ResponseEntity.ok().body(orderList);
     }
 
-    @GetMapping (value = "{id}")
+    @GetMapping (value = "/{id}")
     public ResponseEntity<Order> findById(@PathVariable Long id) {
         Order orderById = service.findByiId(id);
         return ResponseEntity.ok().body(orderById);
     }
 
+    @PostMapping
+    public ResponseEntity<Order> insert(@RequestBody Order order){
+        order = service.insert(order);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(order.getId()).toUri();
+        return ResponseEntity.created(uri).body(order);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
